@@ -10,7 +10,7 @@ const AppProvider = ({ children }) => {
   const [cocktails, setCocktails] = useState([]);
 
   // Setting up function to fetch data from api url
-  const fetchDrinksData = async () => {
+  const fetchDrinksData = useCallback(async () => {
     setLoading(true)
     try {
       const res = await fetch(`${apiUrl}${searchTerm}`);
@@ -37,11 +37,11 @@ const AppProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  },[searchTerm]);
 
   useEffect(() => {
     fetchDrinksData();
-  }, [searchTerm]);
+  }, [searchTerm,fetchDrinksData]);
 
   return <AppContext.Provider value={{ loading, cocktails, setSearchTerm }}>{children}</AppContext.Provider>;
 };
