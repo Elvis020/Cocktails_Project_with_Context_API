@@ -247,14 +247,16 @@ Cocktail
 .cocktail {
   background: var(--mainWhite);
   margin-bottom: 2rem;
-  box-shadow: var(--lightShadow);
+  box-shadow: 2px 5px 5px 0px rgba(0, 0, 0, 0.192);
   transition: var(--mainTransition);
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: repeat(2,1fr);
+  /* grid-template-rows: auto 2fr; */
   border-radius: var(--mainBorderRadius);
+  transition: all .4s ease-in;
 }
 .cocktail:hover {
-  box-shadow: var(--darkShadow);
+  box-shadow: 2px 5px 35px 0px rgba(0, 0, 0, 0.5);
 }
 .cocktail img {
   height: 20rem;
@@ -262,6 +264,7 @@ Cocktail
   border-top-left-radius: var(--mainBorderRadius);
   border-top-right-radius: var(--mainBorderRadius);
 }
+
 .cocktail-footer {
   padding: 1.5rem;
 }
@@ -314,6 +317,9 @@ Form
   padding: 0.5rem;
   font-size: 1.2rem;
 }
+.form-control input:focus{
+  outline: none;
+}
 /* 
 ====== 
 Cocktail
@@ -332,6 +338,7 @@ Cocktail
 .drink img {
   border-radius: var(--mainBorderRadius);
 }
+
 .drink p {
   font-weight: bold;
   text-transform: capitalize;

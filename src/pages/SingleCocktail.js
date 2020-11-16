@@ -1,10 +1,76 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import {Loading} from '../components';
+
+const idLookUpUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 
 const SingleCocktail = () => {
+    const { id } = useParams();
+    const [loading, setLoading] = useState(false);
+    const [cocktail, setCocktail] = useState([]);
+
+    useEffect(() => {
+        setLoading(true)
+        const getDetails = async () => {
+            try {
+                const res = await fetch(`${idLookUpUrl}${id}`);
+                const data = await res.json();
+                console.log(data.drinks[0]);
+                if (data.drinks) {
+                    const { strDrink:name, strDrinkThumb:image, strAlcoholic:info, strGlass:glass, strCategory:category, strInstructions:instructions, strIngredient1,strIngredient2,strIngredient3,strIngredient4,strIngredient5 } = data.drinks[0]
+                let ingredients = [strIngredient1,strIngredient2,strIngredient3,strIngredient4,strIngredient5 ];
+                const newCocktail = {name,image,info,glass,category,ingredients,instructions}
+                setCocktail(newCocktail)
+                }else {
+                    setCocktail(null)
+                }
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
+            }
+        }
+        getDetails()
+    }, [id]);
+
+    if(loading) {
+        return <Loading />
+    }
+    if(!cocktail){
+        return <h2 section-title>no Cocktail to display</h2>
+    }
+    const {name,image,info,glass, category,instructions,ingredients} = cocktail;
     return (
-        <div>
-            <h2>SingleCocktail Page</h2>
-        </div>
+        <section className='section cocktail-section'>
+            <Link to='/' className='btn btn-primary'> back home </Link>
+            <h2 className='section-title'> {name} </h2>
+            <div className="drink">
+                <img src={image} alt={name}/>
+                <div className="drink-info">
+                    <p>
+                        <span className='drink-data'>name:</span> {name}
+                    </p>
+                    <p>
+                        <span className='drink-data'>category:</span> {category}
+                    </p>
+                    <p>
+                        <span className='drink-data'>info:</span> {info}
+                    </p>
+                    <p>
+                        <span className='drink-data'>glass:</span> {glass}
+                    </p>
+                    <p>
+                        <span className='drink-data'>instructions:</span> {instructions}
+                    </p>
+                    <p>
+                        <span className='drink-data'>ingredients:</span> 
+                        {ingredients?.map((item,index) => {
+                            return item ? <span key={index}>{item}</span> : null
+                        })}
+                    </p>
+                </div>
+            </div>
+        </section>
     )
 }
 
